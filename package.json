@@ -1,0 +1,19 @@
+{
+  "name": "drmindit-monorepo",
+  "private": true,
+  "packageManager": "npm@11.12.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "pg": "^8.21.0",
+    "prettier": "^3.0.0",
+    "turbo": "latest"
+  }
+}
