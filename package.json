@@ -9,10 +9,13 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "db:push": "supabase db push",
+    "db:reset": "supabase db reset",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop"
   },
   "devDependencies": {
-    "pg": "^8.21.0",
     "prettier": "^3.0.0",
     "turbo": "latest"
   }
