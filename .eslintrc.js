@@ -3,7 +3,8 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
   extends: [
-    'eslint:recommended'
+    'eslint:recommended',
+    'plugin:@typescript-eslint/eslint-recommended'
   ],
   ignorePatterns: ['dist', 'node_modules', '.turbo', '.next', '.expo'],
   env: {
@@ -11,7 +12,7 @@ module.exports = {
     browser: true
   },
   rules: {
-    'no-unused-vars': 'off',
-    'no-undef': 'off'
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-expressions': 'off'
   }
 };

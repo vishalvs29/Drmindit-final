@@ -1,6 +1,9 @@
 -- Enable moddatetime extension
 create extension if not exists "moddatetime" with schema "extensions";
 
+-- Set search path for trigger functions
+set search_path = extensions, public;
+
 -- Create triggers for updated_at
 create trigger handle_updated_at before update on public.users
   for each row execute procedure moddatetime(updated_at);
@@ -56,8 +59,10 @@ drop policy if exists "Users can manage own recent sessions" on public.recent_se
 create policy "Users can manage own recent sessions" on public.recent_sessions
   for all using (user_id = public.current_user_id()) with check (user_id = public.current_user_id());
 
--- Add INSERT policy for users (webhook / service_role only)
--- We allow INSERT if the user_id matches the clerk_id (which only works properly if service_role bypasses RLS anyway).
--- But explicitly documenting and allowing it for clarity.
-create policy "Service role can insert users" on public.users
-  for insert with check (true);
+-- Add missing UPDATE policy for user_preferences
+drop policy if exists "Users can update own preferences" on public.user_preferences;
+create policy "Users can update own preferences" on public.user_preferences
+  for update using (user_id = public.current_user_id()) with check (user_id = public.current_user_id());
+
+-- chat_messages insert/update is handled via server (service_role) only, 
+-- so no client INSERT/UPDATE policies are needed here.

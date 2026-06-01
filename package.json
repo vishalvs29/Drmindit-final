@@ -10,6 +10,7 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "test": "turbo run test",
     "db:push": "supabase db push",
     "db:reset": "supabase db reset",
     "db:start": "supabase start",
@@ -17,6 +18,12 @@
   },
   "devDependencies": {
     "prettier": "^3.0.0",
-    "turbo": "latest"
+    "turbo": "latest",
+    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "jest": "^29.5.0",
+    "@types/jest": "^29.5.0",
+    "ts-jest": "^29.1.0"
   }
 }

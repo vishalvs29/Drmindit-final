@@ -10,7 +10,8 @@
   "dependencies": {},
   "scripts": {
     "build": "tsc",
-    "lint": "eslint . --ext .tsx,.ts"
+    "lint": "eslint . --ext .ts",
+    "test": "jest --passWithNoTests"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.0.0",

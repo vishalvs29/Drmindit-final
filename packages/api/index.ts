@@ -63,7 +63,7 @@ export class DrMinditClient {
   }
 
   async getProgramDetail(programId: string) {
-    return this.fetchWithAuth<ApiResponse<any>>(`/programs?id=${encodeURIComponent(programId)}`);
+    return this.fetchWithAuth<ApiResponse<any>>(`/programs/${encodeURIComponent(programId)}`);
   }
 
   async streamChatMessage(messages: ChatMessage[], sessionId?: string) {
@@ -80,7 +80,7 @@ export class DrMinditClient {
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => '');
-      throw new Error(errorText || `HTTP error ${response.status}`);
+      throw new DrMinditApiError(response.status, errorText || `HTTP error ${response.status}`);
     }
 
     return response;
