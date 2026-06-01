@@ -2,6 +2,18 @@ import type { ApiResponse, ChatMessage, Program, UserAnalytics, WellnessSession 
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api';
 
+export class DrMinditApiError extends Error {
+  public status: number;
+  public data: any;
+
+  constructor(status: number, message: string, data?: any) {
+    super(message);
+    this.name = 'DrMinditApiError';
+    this.status = status;
+    this.data = data;
+  }
+}
+
 export class DrMinditClient {
   private getToken: () => Promise<string | null>;
 
@@ -24,8 +36,14 @@ export class DrMinditClient {
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || `HTTP error ${response.status}`);
+      let errorData: any;
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = {};
+      }
+      const errorMessage = errorData.error || `HTTP error ${response.status}`;
+      throw new DrMinditApiError(response.status, errorMessage, errorData);
     }
 
     return response.json() as Promise<T>;

@@ -24,6 +24,11 @@ cp .env.example .env.local
 cp apps/web/.env.example apps/web/.env.local
 cp apps/mobile/.env.example apps/mobile/.env
 
+# 3.5 Configure Clerk Webhook (Required)
+# DrMindit relies on Clerk webhooks to create rows in public.users.
+# Ensure your Clerk dashboard is configured to send 'user.created' events to your ngrok or production endpoint (/api/webhooks/clerk).
+# Add the WEBHOOK_SECRET to your .env files.
+
 # 4. Start the local Supabase stack (requires Docker)
 npm run db:start
 
