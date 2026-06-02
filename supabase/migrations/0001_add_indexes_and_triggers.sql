@@ -64,5 +64,7 @@ drop policy if exists "Users can update own preferences" on public.user_preferen
 create policy "Users can update own preferences" on public.user_preferences
   for update using (user_id = public.current_user_id()) with check (user_id = public.current_user_id());
 
+-- Inserts are intentionally server-only (service_role via /api/chat route). Do not add a client INSERT policy.
 -- chat_messages insert/update is handled via server (service_role) only, 
 -- so no client INSERT/UPDATE policies are needed here.
+

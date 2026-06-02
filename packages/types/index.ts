@@ -56,3 +56,43 @@ export type Program = {
 export type ApiResponse<T> = {
   data: T;
 };
+
+export type ProgramTask = {
+  id: string;
+  program_day_id: string;
+  session_id?: string | null;
+  task_type: string;
+  title: string;
+  session?: WellnessSession | null;
+};
+
+export type ProgramDay = {
+  id: string;
+  program_id: string;
+  day_number: number;
+  title: string;
+  description?: string | null;
+  program_tasks?: ProgramTask[];
+};
+
+export type ProgramDetail = Program & {
+  program_days?: ProgramDay[];
+};
+
+export type ProgramProgress = {
+  id: string;
+  program_id: string;
+  current_day: number;
+  completed_days: number[];
+  updated_at?: string;
+};
+
+export type MoodEntry = {
+  id: string;
+  mood_score: number;
+  emotions: string[];
+  stress_level?: number | null;
+  notes?: string | null;
+  created_at: string;
+};
+

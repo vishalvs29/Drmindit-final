@@ -1,12 +1,21 @@
-import type { ApiResponse, ChatMessage, Program, UserAnalytics, WellnessSession } from '@drmindit/types';
+import type {
+  ApiResponse,
+  ChatMessage,
+  Program,
+  UserAnalytics,
+  WellnessSession,
+  ProgramDetail,
+  ProgramProgress,
+  MoodEntry,
+} from '@drmindit/types';
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api';
 
 export class DrMinditApiError extends Error {
   public status: number;
-  public data: any;
+  public data: unknown;
 
-  constructor(status: number, message: string, data?: any) {
+  constructor(status: number, message: string, data?: unknown) {
     super(message);
     this.name = 'DrMinditApiError';
     this.status = status;
@@ -36,13 +45,13 @@ export class DrMinditClient {
     });
 
     if (!response.ok) {
-      let errorData: any;
+      let errorData: Record<string, unknown>;
       try {
-        errorData = await response.json();
+        errorData = await response.json() as Record<string, unknown>;
       } catch (e) {
         errorData = {};
       }
-      const errorMessage = errorData.error || `HTTP error ${response.status}`;
+      const errorMessage = typeof errorData.error === 'string' ? errorData.error : `HTTP error ${response.status}`;
       throw new DrMinditApiError(response.status, errorMessage, errorData);
     }
 
@@ -63,7 +72,7 @@ export class DrMinditClient {
   }
 
   async getProgramDetail(programId: string) {
-    return this.fetchWithAuth<ApiResponse<any>>(`/programs/${encodeURIComponent(programId)}`);
+    return this.fetchWithAuth<ApiResponse<ProgramDetail>>(`/programs/${encodeURIComponent(programId)}`);
   }
 
   async streamChatMessage(messages: ChatMessage[], sessionId?: string) {
@@ -105,24 +114,25 @@ export class DrMinditClient {
   }
 
   async logMood(moodScore: number, emotions: string[], stressLevel: number, notes?: string) {
-    return this.fetchWithAuth<ApiResponse<any>>('/mood', {
+    return this.fetchWithAuth<ApiResponse<MoodEntry>>('/mood', {
       method: 'POST',
       body: JSON.stringify({ moodScore, emotions, stressLevel, notes }),
     });
   }
 
   async getMoodEntries() {
-    return this.fetchWithAuth<ApiResponse<any[]>>('/mood');
+    return this.fetchWithAuth<ApiResponse<MoodEntry[]>>('/mood');
   }
 
   async getProgramProgress() {
-    return this.fetchWithAuth<ApiResponse<any[]>>('/programs/progress');
+    return this.fetchWithAuth<ApiResponse<ProgramProgress[]>>('/programs/progress');
   }
 
   async updateProgramProgress(programId: string, currentDay: number, completedDays: number[]) {
-    return this.fetchWithAuth<ApiResponse<any>>('/programs/progress', {
+    return this.fetchWithAuth<ApiResponse<ProgramProgress>>('/programs/progress', {
       method: 'POST',
       body: JSON.stringify({ programId, currentDay, completedDays }),
     });
   }
 }
+

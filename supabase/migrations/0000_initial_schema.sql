@@ -275,6 +275,7 @@ create policy "Users can insert own program progress" on public.program_progress
 -- CHAT SESSIONS & MESSAGES
 create policy "Users can manage own chat sessions" on public.chat_sessions for all using (user_id = public.current_user_id());
 create policy "Users can insert own chat sessions" on public.chat_sessions for insert with check (user_id = public.current_user_id());
+-- Inserts are intentionally server-only (service_role via /api/chat route). Do not add a client INSERT policy.
 -- Note: chat_messages relies on the parent chat_session for RLS, but we explicitly enforce it via a join in a real complex policy. 
 -- For simplicity, we assume messages are inserted by the server using service_role, and read via API. 
 -- If direct Supabase client read is needed:
